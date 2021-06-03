@@ -1,36 +1,41 @@
 pipeline{
     agent any
-    stages{
-        stage("A"){
-            steps{
-                echo "========executing A========"
-                echo "========executing B========"
-                echo "========executing C========"
-                echo "========executing D========"
-                echo "========executing E========"
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========A executed successfully========"
-                }
-                failure{
-                    echo "========A execution failed========"
-                }
-            }
-        }
+
+    environment {
+      APP_NAME = 'testing-ci-cd'
+
+      //docker
+      IMAGE_NAME = "haffjjj/devops-jenkins-ci_cd"
+      REGISTRY_CREDENTIAL = 'haffjjj-dockerhub'
+      DOCKER_IMAGE = ''
+
+      TELEGRAM_TOKEN = credentials('TELEGRAM_TOKEN')
     }
-    post{
-        always{
-            echo "========always========"
+
+    stages{
+        stage("Init"){
+          steps{
+            sh 'ls'
+          }
         }
-        success{
-            echo "========pipeline executed successfully ========"
+
+        stage("Testing"){
+          steps{
+            echo 'Test application'
+            sh 'npm run test'
+          }
         }
-        failure{
-            echo "========pipeline execution failed========"
+
+        stage("Build Docker Image"){
+          steps{
+            echo 'Build docker image'
+          }
+        }
+
+        stage("Deploy"){
+          steps{
+            echo 'Deploy to server'
+          }
         }
     }
 }
