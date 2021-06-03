@@ -34,7 +34,7 @@ pipeline{
     }
     post{
         success{
-            echo "Build sucess ${BUILD_NUMBER}"
+            echo "Build sucess ${BUILD_NUMBER} "
         }
     }
 }
