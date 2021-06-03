@@ -6,6 +6,10 @@ pipeline{
         stage("A"){
             steps{
                 echo "========executing A========"
+                echo "========executing B========"
+                echo "========executing C========"
+                echo "========executing D========"
+                echo "========executing E========"
             }
             post{
                 always{
