@@ -3,6 +3,7 @@ pipeline{
 
     environment {
       APP_NAME = 'testing-ci-cd'
+      GIT_URL = 'git@github.com:jonsoftware/devops-jenkins-ci_cd.git'
 
       //docker
       IMAGE_NAME = "haffjjj/devops-jenkins-ci_cd"
@@ -13,6 +14,13 @@ pipeline{
     }
 
     stages{
+        // stage("Clone repository"){
+        //   steps{
+        //     echo 'Clone repository'
+        //     git credentialsId: 'RPO_SSH', url: GIT_URL, branch: 'master'
+        //   }
+        // }
+
         stage("Init"){
           steps{
             sh 'ls'
@@ -22,7 +30,7 @@ pipeline{
         stage("Testing"){
           steps{
             echo 'Test application'
-            sh 'npm run test'
+            // sh 'npm run test'
           }
         }
 
