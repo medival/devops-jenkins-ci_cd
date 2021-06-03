@@ -3,47 +3,38 @@ pipeline{
 
     environment {
       APP_NAME = 'testing-ci-cd'
-      GIT_URL = 'git@github.com:jonsoftware/devops-jenkins-ci_cd.git'
-
       //docker
-      IMAGE_NAME = "haffjjj/devops-jenkins-ci_cd"
-      REGISTRY_CREDENTIAL = 'haffjjj-dockerhub'
       DOCKER_IMAGE = ''
+      DOCKER_IMAGE_NAME = "haffjjj/devops-jenkins-ci_cd"
+      DOCKER_REGISTRY_CREDENTIAL = 'DOCKER_CREDENTIAL'
 
       // TELEGRAM_TOKEN = credentials('TELEGRAM_TOKEN')
     }
 
     stages{
-        // stage("Clone repository"){
-        //   steps{
-        //     echo 'Clone repository'
-        //     git credentialsId: 'RPO_SSH', url: GIT_URL, branch: 'master'
-        //   }
-        // }
-
-        stage("Init"){
-          steps{
-            sh 'ls'
-          }
-        }
-
-        stage("Testing"){
-          steps{
-            echo 'Test application'
-            // sh 'npm run test'
-          }
-        }
-
         stage("Build Docker Image"){
           steps{
             echo 'Build docker image'
+            script{
+              dockerImage = docker.build imagename
+            }
           }
         }
 
-        stage("Deploy"){
+        stage("Deploy Docker Image"){
           steps{
             echo 'Deploy to server'
+            script {
+              docker.withRegistry( '', DOCKER_REGISTRY_CREDENTIAL ) {
+              dockerImage.push("$BUILD_NUMBER")
+              dockerImage.push('latest')
+            }
           }
+        }
+    }
+    post{
+        success{
+            echo "Build sucess ${BUILD_NUMBER}"
         }
     }
 }
