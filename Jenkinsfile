@@ -9,7 +9,7 @@ pipeline{
       REGISTRY_CREDENTIAL = 'haffjjj-dockerhub'
       DOCKER_IMAGE = ''
 
-      TELEGRAM_TOKEN = credentials('TELEGRAM_TOKEN')
+      // TELEGRAM_TOKEN = credentials('TELEGRAM_TOKEN')
     }
 
     stages{
