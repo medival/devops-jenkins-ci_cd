@@ -14,54 +14,62 @@ pipeline{
     }
 
     stages{
-        stage("Validation"){
-          steps{
-            echo 'Checking application'
+      stage("Init"){
+        steps{
+          script{
+            gv = load "script.groovy"
+          }
+        }
+      }
 
-            script{
-              try{
-                sh "dokku apps:exists ${APP_NAME}"
-              } catch(err){
-                sh "dokku apps:create ${APP_NAME}"
-              }
+      stage("Validation"){
+        steps{
+          echo 'Checking application'
+
+          script{
+            try{
+              sh "dokku apps:exists ${APP_NAME}"
+            } catch(err){
+              sh "dokku apps:create ${APP_NAME}"
             }
           }
         }
-        
-        stage("Build Docker Image"){
-          steps{
-            echo 'Building the docker image, this may take a few minutes..'
+      }
+      
+      stage("Build Docker Image"){
+        steps{
+          echo 'Building the docker image, this may take a few minutes..'
 
-            script{
-              dockerImage = docker.build DOCKER_IMAGE_NAME
+          script{
+            dockerImage = docker.build DOCKER_IMAGE_NAME
+          }
+        }
+      }
+
+      stage("Deploy to the Server"){
+        steps{
+          echo "Deploying our app into ${BRANCH_NAME}"
+
+          sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
+          sh "dokku tags:deploy ${APP_NAME} ${TAG}"
+          
+          script{
+            if(env.HTTP_PORT){
+                sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
+            }
+            if(env.DOMAIN){
+              sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
             }
           }
         }
-
-        stage("Deploy to the Server"){
-          steps{
-            echo "Deploying our app into ${BRANCH_NAME}"
-
-            sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
-            sh "dokku tags:deploy ${APP_NAME} ${TAG}"
-           
-            script{
-              if(env.HTTP_PORT){
-                 sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
-              }
-              if(env.DOMAIN){
-                sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
-              }
-            }
-          }
-        }
+      }
     }
     post{
       failure{
-        echo 'failure, send notification'
+        gv.sendTeleMessage('failure, send notification')
       }
       success{
-        echo 'success, send notification'
+        gv.sendTeleMessage('sucess, send notification')
       }
     }
 }
