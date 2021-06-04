@@ -4,7 +4,7 @@ pipeline{
     environment {
       NAME = 'jenkins-ci-new'
       IMAGE_USERNAME = 'haffjjj'
-      DOMAIN = 'jenkins-ci.syafie.me'
+      DOMAIN = ''
       HTTP_PORT = '8080' // exposed from docker
   
       APP_NAME = "${NAME}-${BRANCH_NAME}"
@@ -45,7 +45,11 @@ pipeline{
             sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
             sh "dokku tags:deploy ${APP_NAME} ${TAG}"
             sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
-            sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
+            script{
+              if(DOMAIN){
+                sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
+              }
+            }
           }
         }
     }
