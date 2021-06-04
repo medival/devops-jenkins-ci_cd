@@ -14,8 +14,10 @@ pipeline{
 
     stages{
         stage("Validation"){
-          echo 'Checking application is created'
-          sh "dokku apps:exists ${APP_NAME}"
+          steps{
+            echo 'Checking application is created'
+            sh "dokku apps:exists ${APP_NAME}"
+          }
         }
         
         stage("Build Docker Image"){
