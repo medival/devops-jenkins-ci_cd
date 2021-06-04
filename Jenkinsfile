@@ -15,20 +15,21 @@ pipeline{
         stage("Build Docker Image"){
           steps{
             echo 'Build docker image'
-            // script{
-            //   dockerImage = docker.build imagename
-            // }
+            script{
+              dockerImage = docker.build imagename
+            }
           }
         }
 
         stage("Deploy Docker Image"){
           steps{
             echo 'Deploy to server'
-            // script {
-            //   docker.withRegistry( '', DOCKER_REGISTRY_CREDENTIAL ) {
-            //   dockerImage.push("$BUILD_NUMBER")
-            //   dockerImage.push('latest')
-            // }
+            script {
+              docker.withRegistry( '', DOCKER_REGISTRY_CREDENTIAL ) {
+                dockerImage.push("$BUILD_NUMBER")
+                dockerImage.push('latest')
+              }
+            }
           }
         }
     }
