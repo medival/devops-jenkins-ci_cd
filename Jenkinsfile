@@ -21,7 +21,7 @@ pipeline{
             script{
               try{
                 sh "dokku apps:exists ${APP_NAME}"
-              } catch(){
+              } catch(err){
                 sh "dokku apps:create ${APP_NAME}"
               }
             }
