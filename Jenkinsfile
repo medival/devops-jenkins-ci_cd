@@ -2,10 +2,10 @@ pipeline{
     agent any
 
     environment {
-      APP_NAME = 'jenkins-ci'
+      NAME = 'jenkins-ci'
       IMAGE_USERNAME = 'haffjjj'
       
-      APP_NAME = "${APP_NAME}-${BRANCH_NAME}"
+      APP_NAME = "${NAME}-${BRANCH_NAME}"
       TAG = "${BUILD_NUMBER}"
       DOCKER_IMAGE = ''
       DOCKER_IMAGE_NAME = "${IMAGE_USERNAME}/${APP_NAME}:${TAG}"
