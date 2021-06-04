@@ -46,10 +46,10 @@ pipeline{
             sh "dokku tags:deploy ${APP_NAME} ${TAG}"
            
             script{
-              if(env.HTTP_PORT !== ''){
+              if(env.HTTP_PORT){
                  sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
               }
-              if(env.DOMAIN  !== ''){
+              if(env.DOMAIN){
                 sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
               }
             }
