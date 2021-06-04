@@ -66,10 +66,14 @@ pipeline{
     }
     post{
       failure{
-        gv.sendTeleMessage('failure, send notification')
+        script{
+          gv.sendTeleMessage('failure, send notification')
+        }
       }
       success{
-        gv.sendTeleMessage('sucess, send notification')
+        script{
+          gv.sendTeleMessage('sucess, send notification')
+        }
       }
     }
 }
