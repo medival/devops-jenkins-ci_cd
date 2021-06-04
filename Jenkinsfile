@@ -44,9 +44,12 @@ pipeline{
 
             sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
             sh "dokku tags:deploy ${APP_NAME} ${TAG}"
-            sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
+           
             script{
-              if(DOMAIN){
+              if(HTTP_PORT !== ''){
+                 sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
+              }
+              if(DOMAIN  !== ''){
                 sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
               }
             }
