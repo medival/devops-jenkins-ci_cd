@@ -2,40 +2,30 @@ pipeline{
     agent any
 
     environment {
-      APP_NAME = 'testing-ci-cd'
-      //docker
+      APP_NAME = 'jenkins-ci'
+      IMAGE_USERNAME = 'haffjjj'
+      
+      APP_NAME = "${APP_NAME}-${BRANCH_NAME}"
+      TAG = "${BUILD_NUMBER}"
       DOCKER_IMAGE = ''
-      DOCKER_IMAGE_NAME = "haffjjj/devops-jenkins-ci_cd:latest"
-
-      // TELEGRAM_TOKEN = credentials('TELEGRAM_TOKEN')
+      DOCKER_IMAGE_NAME = "${IMAGE_USERNAME}/${APP_NAME}:${TAG}"
+      DOKKU_IMAGE_NAME = "dokku/${APP_NAME}:${TAG}"
+    }
+    
+    stage("Build Docker Image"){
+      steps{
+        script{
+          dockerImage = docker.build DOCKER_IMAGE_NAME
+        }
+      }
     }
 
     stages{
-        // stage("Build Docker Image"){
-        //   steps{
-        //     echo 'Build docker image'
-        //     script{
-        //       dockerImage = docker.build DOCKER_IMAGE_NAME
-        //     }
-        //   }
-        // }
-
-        // stage("Deploy Docker Image"){
-        //   steps{
-        //     echo 'Deploy to server'
-        //     script {
-        //       docker.withRegistry( '', 'DOCKER_CREDENTIAL' ) {
-        //         dockerImage.push("$BUILD_NUMBER")
-        //         dockerImage.push('latest')
-        //       }
-        //     }
-        //   }
-        // }
-
         stage("Deploy to Server"){
           steps{
-            sh 'dokku apps:list'
-            sh 'dokku domains:report'
+            sh "dokku apps:exists ${APP_NAME}"
+            sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
+            sh "dokku tags:deploy ${APP_NAME} ${TAG}"
           }
         }
     }
