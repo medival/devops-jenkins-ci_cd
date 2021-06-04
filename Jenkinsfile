@@ -24,6 +24,9 @@ pipeline{
               echo "Create application"
               sh "dokku apps:create ${APP_NAME}"
             }
+            always {
+              cleanWs()
+            }
           }
         }
         
