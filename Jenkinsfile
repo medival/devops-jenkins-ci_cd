@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-      NAME = 'jenkins-ci-new'
+      NAME = 'jenkins-ci'
       IMAGE_USERNAME = 'haffjjj'
       DOMAIN = 'jenkins-ci.syafie.me'
       HTTP_PORT = '8080' // exposed from docker
@@ -14,18 +14,16 @@ pipeline{
     }
 
     stages{
-        stage("Check Application is Exists"){
+        stage("Validation"){
           steps{
             echo 'Checking application'
-            sh "dokku apps:exists ${APP_NAME}"
-          }
-          post{
-            failure{
-              echo "Create application"
-              sh "dokku apps:create ${APP_NAME}"
-            }
-            always {
-              cleanWs()
+
+            script{
+              try{
+                sh "dokku apps:exists ${APP_NAME}"
+              } catch(){
+                sh "dokku apps:create ${APP_NAME}"
+              }
             }
           }
         }
@@ -52,11 +50,11 @@ pipeline{
         }
     }
     post{
-        failure{
-          echo 'failure, send notification'
-        }
-        success{
-          echo 'success, send notification'
-        }
+      failure{
+        echo 'failure, send notification'
+      }
+      success{
+        echo 'success, send notification'
+      }
     }
 }
