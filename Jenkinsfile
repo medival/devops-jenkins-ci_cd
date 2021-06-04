@@ -11,6 +11,9 @@ pipeline{
       TAG = "${BUILD_NUMBER}"
       DOCKER_IMAGE_NAME = "${IMAGE_USERNAME}/${APP_NAME}:${TAG}"
       DOKKU_IMAGE_NAME = "dokku/${APP_NAME}:${TAG}"
+
+      TELE_SECRET = credentials('TELE_SECRET')
+      TELE_USER_ID = credentials('TELE_USER_ID')
     }
 
     stages{
@@ -18,7 +21,7 @@ pipeline{
         steps{
           script{
             gv = load "script.groovy"
-            gv.sendTeleMessage("🏗️ Building ${APP_NAME} 🙏 ..")
+            gv.sendTeleMessage("🏗️ Building ${APP_NAME} ${TAG} 🙏 ..")
           }
         }
       }
