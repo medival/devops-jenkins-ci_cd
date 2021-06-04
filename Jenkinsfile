@@ -76,7 +76,7 @@ pipeline{
       }
       success{
         script{
-          gv.sendTeleMessage('🤘 Success build ${APP_NAME} ${TAG}, ${DOMAIN}')
+          gv.sendTeleMessage("🤘 Success build ${APP_NAME} ${TAG}, ${DOMAIN}")
         }
       }
     }
