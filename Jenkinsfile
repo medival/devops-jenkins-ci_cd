@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-      NAME = 'jenkins-ci'
+      NAME = 'jenkins-ci-new'
       IMAGE_USERNAME = 'haffjjj'
       DOMAIN = 'jenkins-ci.syafie.me'
       HTTP_PORT = '8080' // exposed from docker
