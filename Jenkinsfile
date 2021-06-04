@@ -36,7 +36,7 @@ pipeline{
             echo "Deploying our app into ${BRANCH_NAME}"
             sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
             sh "dokku tags:deploy ${APP_NAME} ${TAG}"
-            sh "dokku proxy:ports-set http:80:${HTTP_PORT}"
+            sh "dokku proxy:ports-set ${APP_NAME} http:80:${HTTP_PORT}"
             sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
           }
         }
