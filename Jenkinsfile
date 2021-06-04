@@ -21,7 +21,7 @@ pipeline{
         steps{
           script{
             gv = load "script.groovy"
-            gv.sendTeleMessage("🏗️ Building ${APP_NAME} ${TAG} 🙏 ..")
+            gv.sendTeleMessage("🏗️ Building ${APP_NAME} #${TAG} 🙏 ..")
           }
         }
       }
@@ -71,12 +71,16 @@ pipeline{
     post{
       failure{
         script{
-          gv.sendTeleMessage('🔴 Failed when building ${APP_NAME} ${TAG}')
+          gv.sendTeleMessage('🔴 Failed when building ${APP_NAME} #${TAG}')
         }
       }
       success{
         script{
-          gv.sendTeleMessage("🤘 Success build ${APP_NAME} ${TAG}, ${DOMAIN}")
+          if(env.DOMAIN){
+            gv.sendTeleMessage("🤘 Success build ${APP_NAME} #${TAG}, ${DOMAIN}")
+          } else {
+            gv.sendTeleMessage("🤘 Success build ${APP_NAME} #${TAG}")
+          }
         }
       }
     }
