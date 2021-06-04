@@ -23,13 +23,19 @@ pipeline{
 
         stage("Deploy Docker Image"){
           steps{
-            echo 'Deploy to server ho'
+            echo 'Deploy to server'
             script {
               docker.withRegistry( '', DOCKER_REGISTRY_CREDENTIAL ) {
                 dockerImage.push("$BUILD_NUMBER")
                 dockerImage.push('latest')
               }
             }
+          }
+        }
+
+        stage("Deploy to Server"){
+          steps{
+            
           }
         }
     }
