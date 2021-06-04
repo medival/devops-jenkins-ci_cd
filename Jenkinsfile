@@ -4,6 +4,8 @@ pipeline{
     environment {
       NAME = 'jenkins-ci'
       IMAGE_USERNAME = 'haffjjj'
+      DOMAIN = 'jenkins-ci.syafie.me'
+      HTTP_PORT = '8080' // exposed from docker
       
       APP_NAME = "${NAME}-${BRANCH_NAME}"
       TAG = "${BUILD_NUMBER}"
@@ -29,11 +31,13 @@ pipeline{
           }
         }
 
-        stage("Deploy to Server"){
+        stage("Deploy to the Server"){
           steps{
             echo "Deploying our app into ${BRANCH_NAME}"
             sh "docker tag ${DOCKER_IMAGE_NAME} ${DOKKU_IMAGE_NAME}"
             sh "dokku tags:deploy ${APP_NAME} ${TAG}"
+            sh "dokku proxy:ports-set http:80:${HTTP_PORT}"
+            sh "dokku domains:add ${APP_NAME} ${DOMAIN}"
           }
         }
     }
