@@ -3,7 +3,7 @@ def sendTeleMessage(message){
 }
 
 def registerDomain(){
-  sh "curl --location --request POST 'https://api.cloudflare.com/client/v4/zones/692e5464858990ff83891a631e4e574f/dns_records' \
+  sh "curl --location --request POST 'https://api.cloudflare.com/client/v4/zones/${CF_ZONE}/dns_records' \
     --header 'X-Auth-Email: ${CF_EMAIL}' \
     --header 'X-Auth-Key: ${CF_AUTH_KEY}' \
     --header 'Content-Type: application/json' \
