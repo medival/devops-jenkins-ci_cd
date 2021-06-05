@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-      NAME = 'test-node'
+      NAME = 'hello-world-app'
       IMAGE_USERNAME = 'haffjjj'
       DOMAIN = ''
       HTTP_PORT = '8080' // exposed from docker
