@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-      NAME = 'jenkins-ci-new'
+      NAME = 'jenkins-ci-new-test'
       IMAGE_USERNAME = 'haffjjj'
       DOMAIN = ''
       HTTP_PORT = '8080' // exposed from docker
@@ -14,6 +14,12 @@ pipeline{
 
       TELE_SECRET = credentials('TELE_SECRET')
       TELE_USER_ID = credentials('TELE_USER_ID')
+
+      SERVER_IP = '194.233.74.212'
+      CF_EMAIL = 'hafizjoundys@gmail.com'
+      CF_ZONE = '692e5464858990ff83891a631e4e574f'
+      CF_AUTH_KEY = credentials('CF_AUTH_KEY')
+      CF_MAIN_DOMAIN = 'syafie.me'
     }
 
     stages{
@@ -67,11 +73,17 @@ pipeline{
           }
         }
       }
+
+      stage("Registering Domain"){
+        steps{
+          echo "Registering domain.."
+        }
+      }
     }
     post{
       failure{
         script{
-          gv.sendTeleMessage('🔴 Failed when building ${APP_NAME} #${TAG}')
+          gv.sendTeleMessage("🔴 Failed when building ${APP_NAME} #${TAG}")
         }
       }
       success{
