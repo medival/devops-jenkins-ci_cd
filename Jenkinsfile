@@ -77,6 +77,9 @@ pipeline{
       stage("Registering Domain"){
         steps{
           echo "Registering domain.."
+          script{
+            gv.registerDomain()
+          }
         }
       }
     }
