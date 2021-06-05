@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-      NAME = 'jenkins-ci-new-test'
+      NAME = 'test-node'
       IMAGE_USERNAME = 'haffjjj'
       DOMAIN = ''
       HTTP_PORT = '8080' // exposed from docker
@@ -91,10 +91,11 @@ pipeline{
       }
       success{
         script{
+          def message = "🤘 Success build ${APP_NAME} #${TAG}, ${APP_NAME}.${CF_MAIN_DOMAIN}"
           if(env.DOMAIN){
-            gv.sendTeleMessage("🤘 Success build ${APP_NAME} #${TAG}, ${DOMAIN}")
+            gv.sendTeleMessage(message + ", ${DOMAIN}")
           } else {
-            gv.sendTeleMessage("🤘 Success build ${APP_NAME} #${TAG}")
+            gv.sendTeleMessage(message)
           }
         }
       }
